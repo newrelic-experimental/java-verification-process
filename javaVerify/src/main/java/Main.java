@@ -1,5 +1,3 @@
-package com.verify;
-
 import java.io.IOException;
 
 public class Main {
