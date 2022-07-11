@@ -12,9 +12,9 @@ public class QueryController {
     private static JSONObject fullResponse;
 
     /*
-        Search for repos within GitHub with name "newrelic-java",
-        Read Input Stream into StringBuilder,
-        Convert to JSON and return repos in JSONArray of items
+    Search for repos within GitHub with name "newrelic-java",
+    Read Input Stream into StringBuilder,
+    Convert to JSON and return repos in JSONArray of items
      */
     public static void search() throws IOException {
 
@@ -45,18 +45,16 @@ public class QueryController {
             JSONArray items = responseJSONObj.getJSONArray("items");
             responseItems = items;
 
-            //return items;
             //System.out.println(items);
 
         } else {
             System.out.println("GET request failed");
-            //return new JSONArray("Get failed");
         }
     }
 
     /*
-        Parse JSONArray of response items,
-        return name of repo associated with object at index
+    Parse JSONArray of response items,
+    return name of repo associated with object at index
      */
     public static String getRepoName(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
@@ -65,8 +63,8 @@ public class QueryController {
     }
 
     /*
-        Parse JSONArray of response items,
-        return clone_url of repo associated with object at index
+    Parse JSONArray of response items,
+    return clone_url of repo associated with object at index
      */
     public static String getCloneUrl(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
@@ -74,6 +72,9 @@ public class QueryController {
         //return "test";
     }
 
+    /*
+    Get total count of repos in query from JSON response key "total_count"
+     */
     public static int getRepoCount() {
         return fullResponse.getInt("total_count"); //get total count of repos from the query
         //return 0;

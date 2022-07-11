@@ -32,8 +32,16 @@ public class Main {
                 cloneUrl = query.getCloneUrl(i);
                 System.out.println("Verifying " + name + "...");
                 verify.cloneVerifyProcess(name, cloneUrl);
+
                 // Parse through logged output - collect violation information
-                    // Add violation info to report
+                ParseLog parse = new ParseLog();
+
+                if (parse.parseForBuild()) { //skip when build is successful, no violations
+                    verify.deleteVerifiedRepo(name);
+                    continue;
+                }
+                String violationResult = parse.parseForViolation();
+                //Add violationResult to the report, include name of repo and violations
                 verify.deleteVerifiedRepo(name);
             }
 
