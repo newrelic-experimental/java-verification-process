@@ -31,17 +31,19 @@ public class Main {
             Report report = new Report();
             FileWriter writer = report.generateReport();
 
-            for (int i = 4; i < total_count; ++i) {
+            for (int i = 0; i < total_count; ++i) {
                 name = query.getRepoName(i);
+                System.out.println("Verifying " + name + "...");
 
                 // repos to skip for testing purposes only
-                if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s")) {
-                    verify.deleteVerifiedRepo(name);
+                if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s") ||
+                        name.contains("micronaut-http")) {
+                    verify.deleteRepo(name);
                     continue;
                 }
 
                 cloneUrl = query.getCloneUrl(i);
-                System.out.println("Verifying " + name + "...");
+
                 verify.cloneVerifyProcess(name, cloneUrl);
 
                 // Parse through logged output - collect violation information

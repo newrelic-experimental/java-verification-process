@@ -15,7 +15,6 @@ public class Report {
     public void writeToReport(String repoName, String violation, FileWriter writer) throws IOException {
         writer.write(repoName + '\n');
         writer.write(violation + "\n\n");
-        writer.close();
     }
 
     public void closeFile(FileWriter writer) throws IOException {
