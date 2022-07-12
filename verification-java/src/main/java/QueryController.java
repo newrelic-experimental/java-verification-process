@@ -8,15 +8,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class QueryController {
-    private static JSONArray responseItems;
-    private static JSONObject fullResponse;
+    private JSONArray responseItems;
+    private JSONObject fullResponse;
 
     /*
     Search for repos within GitHub with name "newrelic-java",
     Read Input Stream into StringBuilder,
     Convert to JSON and return repos in JSONArray of items
      */
-    public static void search() throws IOException {
+    public void search() throws IOException {
 
         // Search using HttpUrlConnection and GitHub API with query parameters
         URL url = new URL("https://api.github.com/search/repositories?&per_page=100&sort=updated&q=newrelic-experimental/newrelic-java");
@@ -56,7 +56,7 @@ public class QueryController {
     Parse JSONArray of response items,
     return name of repo associated with object at index
      */
-    public static String getRepoName(int index) {
+    public String getRepoName(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
         return repo.getString("name"); //get string associated with key value 'name'
         //return "test";
@@ -66,7 +66,7 @@ public class QueryController {
     Parse JSONArray of response items,
     return clone_url of repo associated with object at index
      */
-    public static String getCloneUrl(int index) {
+    public String getCloneUrl(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
         return repo.getString("clone_url"); //get string associated with key value 'clone_url'
         //return "test";
@@ -75,7 +75,7 @@ public class QueryController {
     /*
     Get total count of repos in query from JSON response key "total_count"
      */
-    public static int getRepoCount() {
+    public int getRepoCount() {
         return fullResponse.getInt("total_count"); //get total count of repos from the query
         //return 0;
     }

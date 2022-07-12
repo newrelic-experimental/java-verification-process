@@ -26,7 +26,7 @@ public class VerifyInstrumentation {
         Process process2 = processBuilder.start();
 
         int exitCode2 = process2.waitFor();
-        System.out.println("\nExited with error code : " + exitCode2);
+        System.out.println("\nCheck exited with error code : " + exitCode2);
 
         processBuilder.command("/bin/sh", "-c", "./gradlew verifyInstrumentation");
 
@@ -34,7 +34,7 @@ public class VerifyInstrumentation {
 
         // This code redirects and writes the output to a log file in this project directory
         processBuilder.redirectErrorStream(true);
-        File log = new File("test-output.log");
+        File log = new File("command-output.log");
         processBuilder.redirectOutput(log);
 
         Process process3 = processBuilder.start();

@@ -1,2 +1,4 @@
 rootProject.name = 'java-instrumentation-template'
 include 'javaVerify'
+include 'verification-java'
+

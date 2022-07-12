@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/javaVerify" />
+            <option value="$PROJECT_DIR$/verification-java" />
           </set>
         </option>
       </GradleProjectSettings>

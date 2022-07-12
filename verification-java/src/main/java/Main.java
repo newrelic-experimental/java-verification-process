@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
@@ -27,8 +28,18 @@ public class Main {
             int total_count = query.getRepoCount();
             String name, cloneUrl;
             VerifyInstrumentation verify = new VerifyInstrumentation();
-            for (int i = 1; i < total_count; ++i) {
+            Report report = new Report();
+            FileWriter writer = report.generateReport();
+
+            for (int i = 4; i < total_count; ++i) {
                 name = query.getRepoName(i);
+
+                // repos to skip for testing purposes only
+                if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s")) {
+                    verify.deleteVerifiedRepo(name);
+                    continue;
+                }
+
                 cloneUrl = query.getCloneUrl(i);
                 System.out.println("Verifying " + name + "...");
                 verify.cloneVerifyProcess(name, cloneUrl);
@@ -42,8 +53,10 @@ public class Main {
                 }
                 String violationResult = parse.parseForViolation();
                 //Add violationResult to the report, include name of repo and violations
-                verify.deleteVerifiedRepo(name);
+                report.writeToReport(name, violationResult, writer);
+                verify.deleteVerifiedRepo(name); //delete cloned directory locally
             }
+            report.closeFile(writer);
 
         }
 }
