@@ -19,10 +19,11 @@ public class QueryController {
     public void search() throws IOException {
 
         // Search using HttpUrlConnection and GitHub API with query parameters
-        URL url = new URL("https://api.github.com/search/repositories?&per_page=100&sort=updated&q=newrelic-experimental/newrelic-java");
+        URL url = new URL("https://api.github.com/search/repositories?q=newrelic-java+org:newrelic-experimental+language:java&per_page=100&sort=updated");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Authorization", "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");
+        // Add authorization credentials if access needed for private repos
+        //connection.setRequestProperty("Authorization", "");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
 

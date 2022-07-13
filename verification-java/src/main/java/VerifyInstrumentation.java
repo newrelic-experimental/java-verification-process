@@ -8,7 +8,7 @@ public class VerifyInstrumentation {
     Change directory and run verifyInstrumentation command,
     Store output log in separate file to parse through for violation
      */
-    public static void cloneVerifyProcess(String repoName, String cloneUrl) throws InterruptedException, IOException {
+    public void cloneVerifyProcess(String repoName, String cloneUrl) throws InterruptedException, IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // Run git clone here and to clone directory locally using cloneUrl
@@ -49,7 +49,7 @@ public class VerifyInstrumentation {
     For repos that ran the verify command
     Save space for future cloned directories
      */
-    public static void deleteVerifiedRepo(String repoName) throws IOException, InterruptedException {
+    public void deleteVerifiedRepo(String repoName) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         //change working directory
@@ -73,7 +73,7 @@ public class VerifyInstrumentation {
     Generate process to delete newly created directory from cloned repo,
     For repos that need to be skipped or cannot run verify command
      */
-    public static void deleteRepo(String repoName) throws IOException, InterruptedException {
+    public void deleteRepo(String repoName) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("/bin/sh", "-c", "rm -r " + repoName);
         Process process = processBuilder.start();
