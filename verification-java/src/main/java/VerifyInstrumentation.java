@@ -8,7 +8,7 @@ public class VerifyInstrumentation {
     Change directory and run verifyInstrumentation command,
     Store output log in separate file to parse through for violation
      */
-    public void cloneVerifyProcess(String repoName, String cloneUrl) throws InterruptedException, IOException {
+    public void cloneVerifyProcess(String repoName, String cloneUrl, int index) throws InterruptedException, IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // Run git clone here and to clone directory locally using cloneUrl
@@ -33,8 +33,9 @@ public class VerifyInstrumentation {
 
 
         // This code redirects and writes the output to a log file in this project directory
+        // different log file for each repo because parallel thread processes
         processBuilder.redirectErrorStream(true);
-        File log = new File("command-output.log");
+        File log = new File("command-output" + index + ".log");
         processBuilder.redirectOutput(log);
 
         Process process3 = processBuilder.start();
@@ -79,6 +80,18 @@ public class VerifyInstrumentation {
         Process process = processBuilder.start();
         process.waitFor();
     }
+
+    /*
+    Delete log file after it has been parsed for violations
+     */
+    public void deleteParsedLog(int index) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
+        Process process = processBuilder.start();
+        process.waitFor();
+    };
+
+
 
 
 }

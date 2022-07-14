@@ -1,58 +1,43 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Main {
-        public static void main(String[] args) throws IOException, InterruptedException {
+
+    private static final int NTHREADS = 10;
+
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         /*
         Create QueryController and run search method to store response of Search API with keyword "newrelic-java"
          */
-            QueryController query = new QueryController();
-            query.search();
+        QueryController query = new QueryController();
+        query.search();
 
-            /*
-            while input stream still has an object (repo), for each repo:
-                Store name and cloneUrl
-                Run VerifyInstrumentation cloneVerifyProcess for this repo using cloneUrl
-                Get log output
-                If violation
-                    Collect to store in generated report
-                Delete cloned repo by running VerifyInstrumentation deleteRepo
-                    Save space
-             */
-            int total_count = query.getRepoCount();
-            String name, cloneUrl;
-            VerifyInstrumentation verify = new VerifyInstrumentation();
-            Report report = new Report();
-            FileWriter writer = report.generateReport();
+        int total_count = query.getRepoCount();
+        VerifyInstrumentation verify = new VerifyInstrumentation();
+        Report report = new Report();
+        FileWriter writer = report.generateReport();
 
-            for (int i = 26; i < 30; ++i) {
-                name = query.getRepoName(i);
-                System.out.println("Verifying " + name + "...");
-
-                // repos to skip for testing purposes only
-                if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s") ||
-                        name.contains("micronaut-http")) {
-                    verify.deleteRepo(name);
-                    continue;
-                }
-
-                cloneUrl = query.getCloneUrl(i);
-
-                verify.cloneVerifyProcess(name, cloneUrl);
-
-                // Parse through logged output - collect violation information
-                ParseLog parse = new ParseLog();
-
-                if (parse.parseForBuild()) { //skip when build is successful, no violations
-                    verify.deleteVerifiedRepo(name);
-                    continue;
-                }
-                String violationResult = parse.parseForViolation();
-                //Add violationResult to the report, include name of repo and violations
-                report.writeToReport(name, violationResult, writer);
-                verify.deleteVerifiedRepo(name); //delete cloned directory locally
-            }
-            report.closeFile(writer);
-
+        ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
+        //create a CompletableFutures list as callback mechanism for when threads are completed
+        List<CompletableFuture<Boolean>> listFutures = new ArrayList<>();
+        int newStart = 0;
+        //For each repo, run on different threads, create CompletableFuture for each Runnable
+        for (int i = 0; i < total_count-1; ++i) {
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            Runnable worker = new MultiThread(query, verify, report, writer, newStart, future);
+            executor.execute(worker);
+            listFutures.add(future);
+            newStart++; //next thread starts on next repo
         }
+        executor.shutdown();
+
+        CompletableFuture allFutures = CompletableFuture.allOf(listFutures.toArray(new CompletableFuture[listFutures.size()]));
+        allFutures.get();
+        report.closeFile(writer);
+        System.out.println("Threads terminated");
+
+    }
 }

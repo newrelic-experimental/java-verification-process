@@ -9,8 +9,8 @@ public class ParseLog {
     Return if build successful or failed
     True: success, false: failed
      */
-    public static boolean parseForBuild() throws FileNotFoundException {
-        Scanner s = new Scanner(new File("command-output.log"));
+    public static boolean parseForBuild(int index) throws FileNotFoundException {
+        Scanner s = new Scanner(new File("command-output" + index + ".log"));
         while (s.hasNextLine()) {
             String line = s.nextLine();
             if (line.startsWith("BUILD SUCCESSFUL")) {
@@ -29,8 +29,8 @@ public class ParseLog {
     Return violation lines from failed verifyInstrumentation command,
     Parse through output.log for failure exceptions
      */
-    public static String parseForViolation() throws FileNotFoundException {
-        Scanner s = new Scanner(new File("command-output.log"));
+    public static String parseForViolation(int index) throws FileNotFoundException {
+        Scanner s = new Scanner(new File("command-output" + index + ".log"));
         String fullViolation = "";
         while (s.hasNextLine()) {
             String line = s.nextLine();

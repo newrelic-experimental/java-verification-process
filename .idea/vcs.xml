@@ -3,9 +3,13 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-JDBC-ExecuteBatch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-aerospike" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-camel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-couchbase" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-elasticsearch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-executors" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-http4s" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-lettuce" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-micronaut-core" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-micronaut-http" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-mule-4" vcs="Git" />
@@ -13,7 +17,9 @@
     <mapping directory="$PROJECT_DIR$/newrelic-java-quarkus" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-r2dbc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-reactor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-redisson" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-tibco-bw6" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/newrelic-java-undertow" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-vertx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-vertx-extensions" vcs="Git" />
   </component>
