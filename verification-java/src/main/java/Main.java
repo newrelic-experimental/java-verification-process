@@ -1,3 +1,7 @@
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +19,14 @@ public class Main {
         QueryController query = new QueryController();
         query.search();
 
+        //Use logging framework to log program execution/output
+        System.out.println("See logger.txt for program log and report.txt for verifyInstrumentation output");
+        PropertyConfigurator.configure("log4j.properties");
+        Logger logger = LoggerFactory.getLogger(Main.class);
+        logger.info("Program Log\n");
+
+        System.out.println("\nVerifying...");
+
         int total_count = query.getRepoCount();
         VerifyInstrumentation verify = new VerifyInstrumentation();
         Report report = new Report();
@@ -25,7 +37,7 @@ public class Main {
         List<CompletableFuture<Boolean>> listFutures = new ArrayList<>();
         int newStart = 0;
         //For each repo, run on different threads, create CompletableFuture for each Runnable
-        for (int i = 0; i < total_count-1; ++i) {
+        for (int i = 0; i < total_count; ++i) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             Runnable worker = new MultiThread(query, verify, report, writer, newStart, future);
             executor.execute(worker);
@@ -37,7 +49,8 @@ public class Main {
         CompletableFuture allFutures = CompletableFuture.allOf(listFutures.toArray(new CompletableFuture[listFutures.size()]));
         allFutures.get();
         report.closeFile(writer);
-        System.out.println("Threads terminated");
+        logger.info("Threads terminated");
+        System.out.println("\nProcess complete. Clear out logger.txt before running again");
 
     }
 }

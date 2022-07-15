@@ -1,3 +1,8 @@
+import com.newrelic.agent.deps.com.google.common.base.Verify;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -9,6 +14,9 @@ public class VerifyInstrumentation {
     Store output log in separate file to parse through for violation
      */
     public void cloneVerifyProcess(String repoName, String cloneUrl, int index) throws InterruptedException, IOException {
+        PropertyConfigurator.configure("log4j.properties");
+        Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
+
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // Run git clone here and to clone directory locally using cloneUrl
@@ -17,7 +25,7 @@ public class VerifyInstrumentation {
         Process process1 = processBuilder.start();
 
         int exitCode1 = process1.waitFor();
-        System.out.println("\nClone exited with error code : " + exitCode1);
+        logger.info("\n{} Clone exited with error code : {}", repoName, exitCode1);
 
         // Runs gradlew command and changes working directory into cloned repo
         processBuilder.command("/bin/sh", "-c", "./gradlew checkForDependencies");
@@ -26,7 +34,7 @@ public class VerifyInstrumentation {
         Process process2 = processBuilder.start();
 
         int exitCode2 = process2.waitFor();
-        System.out.println("\nCheck exited with error code : " + exitCode2);
+        logger.info("\n{} Check exited with error code : {}", repoName, exitCode2);
 
         processBuilder.command("/bin/sh", "-c", "./gradlew verifyInstrumentation");
 
@@ -42,7 +50,7 @@ public class VerifyInstrumentation {
 
 
         int exitCode3 = process3.waitFor();
-        System.out.println("\nVerify exited with error code : " + exitCode3);
+        logger.info("\n{} Verify exited with error code : {}", repoName, exitCode3);
     }
 
     /*
@@ -51,6 +59,9 @@ public class VerifyInstrumentation {
     Save space for future cloned directories
      */
     public void deleteVerifiedRepo(String repoName) throws IOException, InterruptedException {
+        PropertyConfigurator.configure("log4j.properties");
+        Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
+
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         //change working directory
@@ -58,7 +69,6 @@ public class VerifyInstrumentation {
         Process process1 = processBuilder.start();
 
         process1.waitFor();
-        //printing and storing of exitCode may not be needed
 
         //delete repo's local directory with remove command
         processBuilder.command("/bin/sh", "-c", "rm -r " + repoName);
@@ -66,7 +76,7 @@ public class VerifyInstrumentation {
         Process process2 = processBuilder.start();
 
         int exitCode = process2.waitFor();
-        System.out.println("\nDeletion exited with error code : " + exitCode);
+        logger.info("\n{} Deletion exited with error code : {}", repoName, exitCode);
 
     }
 
@@ -75,10 +85,14 @@ public class VerifyInstrumentation {
     For repos that need to be skipped or cannot run verify command
      */
     public void deleteRepo(String repoName) throws IOException, InterruptedException {
+        PropertyConfigurator.configure("log4j.properties");
+        Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
+
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("/bin/sh", "-c", "rm -r " + repoName);
         Process process = processBuilder.start();
         process.waitFor();
+        logger.info("Skipped verify for {}", repoName);
     }
 
     /*

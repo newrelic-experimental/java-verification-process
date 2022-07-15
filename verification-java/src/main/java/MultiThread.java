@@ -1,3 +1,7 @@
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,10 +30,12 @@ public class MultiThread extends Thread {
 
     @Override
     public void run() {
+        PropertyConfigurator.configure("log4j.properties");
+        Logger logger = LoggerFactory.getLogger(MultiThread.class);
         //clone and verify repo for this thread process
-        for (int i = startIndex; i < startIndex + 1; ++i) {
+        for (int i = startIndex; i < startIndex + 1; ++i) { //change to execute more repos on one thread?
             String name = query.getRepoName(i);
-            System.out.println("Verifying " + name + "...");
+            logger.info("Verifying {} ...", name);
 
             // repos to skip for testing purposes only
             if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s") ||

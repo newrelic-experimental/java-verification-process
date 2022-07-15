@@ -39,14 +39,12 @@ public class QueryController {
 
             //Convert to response from StringBuilder to JSON
             JSONObject responseJSONObj = new JSONObject(response.toString());
-            fullResponse = responseJSONObj;
-            //System.out.println(obj);
+            fullResponse = responseJSONObj;;
 
             //Get items, each repo JSONObject in JSONArray 'items'
             JSONArray items = responseJSONObj.getJSONArray("items");
             responseItems = items;
 
-            //System.out.println(items);
 
         } else {
             System.out.println("GET request failed");
@@ -60,7 +58,6 @@ public class QueryController {
     public String getRepoName(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
         return repo.getString("name"); //get string associated with key value 'name'
-        //return "test";
     }
 
     /*
@@ -70,7 +67,6 @@ public class QueryController {
     public String getCloneUrl(int index) {
         JSONObject repo = responseItems.getJSONObject(index); //get object at specified index (repo at this index)
         return repo.getString("clone_url"); //get string associated with key value 'clone_url'
-        //return "test";
     }
 
     /*
@@ -78,6 +74,5 @@ public class QueryController {
      */
     public int getRepoCount() {
         return fullResponse.getInt("total_count"); //get total count of repos from the query
-        //return 0;
     }
 }
