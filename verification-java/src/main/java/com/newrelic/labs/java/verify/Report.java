@@ -1,3 +1,5 @@
+package com.newrelic.labs.java.verify;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

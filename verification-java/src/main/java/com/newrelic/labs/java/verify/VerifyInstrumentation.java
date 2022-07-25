@@ -1,4 +1,5 @@
-import com.newrelic.agent.deps.com.google.common.base.Verify;
+package com.newrelic.labs.java.verify;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

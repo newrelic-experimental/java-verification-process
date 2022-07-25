@@ -1,3 +1,5 @@
+package com.newrelic.labs.java.verify;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         /*
-        Create QueryController and run search method to store response of Search API with keyword "newrelic-java"
+        Create com.newrelic.labs.java.verify.QueryController and run search method to store response of Search API with keyword "newrelic-java"
          */
         QueryController query = new QueryController();
         query.search();
@@ -59,7 +61,7 @@ public class Main {
         allFutures.get();
         report.closeFile(writer);
         logger.info("Threads terminated");
-        System.out.println("\nProcess complete. Clear out logger.txt before running again");
+        System.out.println("\nProcess complete.");
 
         //delete cloned-repos directory to delete all cloned repos at once
         builder.command("/bin/sh", "-c", "rm -r cloned-repos");

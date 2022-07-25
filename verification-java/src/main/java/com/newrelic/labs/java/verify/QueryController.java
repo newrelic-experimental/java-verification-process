@@ -1,3 +1,5 @@
+package com.newrelic.labs.java.verify;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
