@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ParseLog {
@@ -42,6 +43,16 @@ public class ParseLog {
             }
         }
         return fullViolation;
+    }
+
+    /*
+    Delete log file after it has been parsed for violations
+    */
+    public void deleteParsedLog(int index) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
+        Process process = processBuilder.start();
+        process.waitFor();
     }
 
 

@@ -32,25 +32,40 @@ public class Main {
         Report report = new Report();
         FileWriter writer = report.generateReport();
 
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("/bin/sh", "-c", "mkdir cloned-repos");
+        Process process1 = builder.start();
+        int exitCode1 = process1.waitFor();
+        logger.info("\nCreated directory for cloned repos, exited with error code : {}", exitCode1);
+
+        //create fixed thread pool
         ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
         //create a CompletableFutures list as callback mechanism for when threads are completed
         List<CompletableFuture<Boolean>> listFutures = new ArrayList<>();
-        int newStart = 0;
+
         //For each repo, run on different threads, create CompletableFuture for each Runnable
         for (int i = 0; i < total_count; ++i) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            Runnable worker = new MultiThread(query, verify, report, writer, newStart, future);
+            Runnable worker = new MultiThread(query, verify, report, writer, i, future);
             executor.execute(worker);
             listFutures.add(future);
-            newStart++; //next thread starts on next repo
+            //next thread starts on next repo, index i
         }
+
         executor.shutdown();
 
+        //callback to check if all CompletableFutures from loop have completed
         CompletableFuture allFutures = CompletableFuture.allOf(listFutures.toArray(new CompletableFuture[listFutures.size()]));
         allFutures.get();
         report.closeFile(writer);
         logger.info("Threads terminated");
         System.out.println("\nProcess complete. Clear out logger.txt before running again");
+
+        //delete cloned-repos directory to delete all cloned repos at once
+        builder.command("/bin/sh", "-c", "rm -r cloned-repos");
+        Process process2 = builder.start();
+        int exitCode2 = process2.waitFor();
+        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode2);
 
     }
 }

@@ -63,11 +63,11 @@ public class MultiThread extends Thread {
             // Parse through logged output - collect violation information
             ParseLog parse = new ParseLog();
 
-            //skip when build is successful, no violations
+            //skip if verifyInstrumentation command is successful, no violations
             try {
                 if (parse.parseForBuild(i)) {
-                    verify.deleteVerifiedRepo(name);
-                    verify.deleteParsedLog(i);
+                    verify.deleteRepo(name);
+                    parse.deleteParsedLog(i);
                     continue;
                 }
             } catch (IOException e) {
@@ -86,7 +86,7 @@ public class MultiThread extends Thread {
 
             //delete output log from this repo
             try {
-                verify.deleteParsedLog(i);
+                parse.deleteParsedLog(i);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -97,15 +97,6 @@ public class MultiThread extends Thread {
             try {
                 report.writeToReport(name, violationResult, writer);
             } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            //delete cloned directory locally
-            try {
-                verify.deleteVerifiedRepo(name);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-aerospike" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-camel" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-JDBC-ExecuteBatch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-aerospike" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/newrelic-java-camel" vcs="Git" />

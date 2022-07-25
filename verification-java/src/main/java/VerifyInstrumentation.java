@@ -17,19 +17,20 @@ public class VerifyInstrumentation {
         PropertyConfigurator.configure("log4j.properties");
         Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
 
+        ProcessBuilder initBuilder = new ProcessBuilder();
+
         ProcessBuilder processBuilder = new ProcessBuilder();
 
-        // Run git clone here and to clone directory locally using cloneUrl
-        processBuilder.command("/bin/sh", "-c", "git clone " + cloneUrl);
-
-        Process process1 = processBuilder.start();
-
+        // Run git clone here and to clone directory locally into cloned-repos directory
+        initBuilder.command("/bin/sh", "-c", "git clone " + cloneUrl);
+        initBuilder.directory(new File("cloned-repos"));
+        Process process1 = initBuilder.start();
         int exitCode1 = process1.waitFor();
         logger.info("\n{} Clone exited with error code : {}", repoName, exitCode1);
 
-        // Runs gradlew command and changes working directory into cloned repo
+        // Runs gradlew command and changes working directory into specified cloned repo
         processBuilder.command("/bin/sh", "-c", "./gradlew checkForDependencies");
-        processBuilder.directory(new File(repoName));
+        processBuilder.directory(new File("cloned-repos/" + repoName));
 
         Process process2 = processBuilder.start();
 
@@ -53,36 +54,10 @@ public class VerifyInstrumentation {
         logger.info("\n{} Verify exited with error code : {}", repoName, exitCode3);
     }
 
-    /*
-    Generate process to delete newly created directory from cloned repo,
-    For repos that ran the verify command
-    Save space for future cloned directories
-     */
-    public void deleteVerifiedRepo(String repoName) throws IOException, InterruptedException {
-        PropertyConfigurator.configure("log4j.properties");
-        Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
-
-        ProcessBuilder processBuilder = new ProcessBuilder();
-
-        //change working directory
-        processBuilder.command("/bin/sh", "-c", "cd ..");
-        Process process1 = processBuilder.start();
-
-        process1.waitFor();
-
-        //delete repo's local directory with remove command
-        processBuilder.command("/bin/sh", "-c", "rm -r " + repoName);
-
-        Process process2 = processBuilder.start();
-
-        int exitCode = process2.waitFor();
-        logger.info("\n{} Deletion exited with error code : {}", repoName, exitCode);
-
-    }
 
     /*
     Generate process to delete newly created directory from cloned repo,
-    For repos that need to be skipped or cannot run verify command
+    For repos that need to be skipped, cannot run verify command, or successful build
      */
     public void deleteRepo(String repoName) throws IOException, InterruptedException {
         PropertyConfigurator.configure("log4j.properties");
@@ -90,22 +65,11 @@ public class VerifyInstrumentation {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("/bin/sh", "-c", "rm -r " + repoName);
+        processBuilder.directory(new File("cloned-repos"));
         Process process = processBuilder.start();
         process.waitFor();
-        logger.info("Skipped verify for {}", repoName);
+        logger.info("Skipped or successful verify for {}", repoName);
     }
-
-    /*
-    Delete log file after it has been parsed for violations
-     */
-    public void deleteParsedLog(int index) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
-        Process process = processBuilder.start();
-        process.waitFor();
-    };
-
-
 
 
 }
