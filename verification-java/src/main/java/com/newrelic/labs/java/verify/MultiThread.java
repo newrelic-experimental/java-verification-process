@@ -32,7 +32,6 @@ public class MultiThread extends Thread {
 
     @Override
     public void run() {
-        PropertyConfigurator.configure("log4j.properties");
         Logger logger = LoggerFactory.getLogger(MultiThread.class);
         //clone and verify repo for this thread process
         for (int i = startIndex; i < startIndex + 1; ++i) { //change to execute more repos on one thread?
@@ -40,8 +39,8 @@ public class MultiThread extends Thread {
             logger.info("Verifying {} ...", name);
 
             // repos to skip for testing purposes only
-            if (name.contains("mule") || name.contains("tibco") || name.contains("hystrix") || name.contains("http4s") ||
-                    name.contains("micronaut-http")) {
+            if (name.contains("mule") || name.contains("tibco") || name.contains("http4s") || name.contains("sketch") ||
+                    name.contains("jmx-harvester") || name.contains("micronaut-http")) {
                 try {
                     verify.deleteRepo(name);
                 } catch (IOException e) {

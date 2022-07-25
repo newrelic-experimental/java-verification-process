@@ -15,7 +15,6 @@ public class VerifyInstrumentation {
     Store output log in separate file to parse through for violation
      */
     public void cloneVerifyProcess(String repoName, String cloneUrl, int index) throws InterruptedException, IOException {
-        PropertyConfigurator.configure("log4j.properties");
         Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
 
         ProcessBuilder initBuilder = new ProcessBuilder();
@@ -61,7 +60,6 @@ public class VerifyInstrumentation {
     For repos that need to be skipped, cannot run verify command, or successful build
      */
     public void deleteRepo(String repoName) throws IOException, InterruptedException {
-        PropertyConfigurator.configure("log4j.properties");
         Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
