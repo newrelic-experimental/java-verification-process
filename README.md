@@ -32,7 +32,7 @@
 
 > Once the project is cloned and running, refer to **logger.txt** for an active program log. Once the program has finished, refer to **report.txt** for a report of instrumentations that failed verify.
 > 
-> Note that logger.txt must be cleared before running the program again.
+> Note that report.txt lists the repo name without any other information if a project has build errors or ran the Gradle tasks checkForDependencies or verifyInstrumentation with errors.
 
 ## Usage
 
