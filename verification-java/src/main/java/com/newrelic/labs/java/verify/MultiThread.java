@@ -1,6 +1,5 @@
 package com.newrelic.labs.java.verify;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,15 +33,17 @@ public class MultiThread extends Thread {
     public void run() {
         Logger logger = LoggerFactory.getLogger(MultiThread.class);
         //clone and verify repo for this thread process
-        for (int i = startIndex; i < startIndex + 1; ++i) { //change to execute more repos on one thread?
+        for (int i = startIndex; i < startIndex + 1; ++i) { // can change to execute more repos on one thread
             String name = query.getRepoName(i);
             logger.info("Verifying {} ...", name);
 
-            // repos to skip for testing purposes only
-            if (name.contains("mule") || name.contains("tibco") || name.contains("http4s") || name.contains("sketch") ||
-                    name.contains("jmx-harvester") || name.contains("micronaut-http")) {
+            // repos to skip, do not have the verify command in build.gradle
+            if (name.contains("sketch") || name.contains("jmx-harvester") || name.contains("policycenter")
+                || name.contains("guidewire") || name.contains("transaction") || name.contains("spring-cloud")
+                || name.contains("webhook-to-snmp-trap")) {
                 try {
                     verify.deleteRepo(name);
+                    logger.info("Skipped verify for {}", name);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
@@ -53,8 +54,13 @@ public class MultiThread extends Thread {
 
             //use cloneUrl to clone and run verify command in repo
             String cloneUrl = query.getCloneUrl(i);
+            int checkClone;
             try {
-                verify.cloneVerifyProcess(name, cloneUrl, i);
+                checkClone = verify.cloneVerifyProcess(name, cloneUrl, i);
+                if (checkClone == 1) {
+                    logger.info("Unable to clone or build project {}", name);
+                    continue;
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
@@ -69,6 +75,7 @@ public class MultiThread extends Thread {
                 if (parse.parseForBuild(i)) {
                     verify.deleteRepo(name);
                     parse.deleteParsedLog(i);
+                    logger.info("Successful verify for {}", name);
                     continue;
                 }
             } catch (IOException e) {

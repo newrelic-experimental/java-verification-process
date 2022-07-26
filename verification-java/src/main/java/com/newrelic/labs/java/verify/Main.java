@@ -61,7 +61,7 @@ public class Main {
         allFutures.get();
         report.closeFile(writer);
         logger.info("Threads terminated");
-        System.out.println("\nProcess complete. Please clear logger.txt before running again.");
+        System.out.println("\nProcess complete. Refer to report.txt for report.");
 
         //delete cloned-repos directory to delete all cloned repos at once
         builder.command("/bin/sh", "-c", "rm -r cloned-repos");
