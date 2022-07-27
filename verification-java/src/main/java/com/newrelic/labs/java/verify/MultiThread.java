@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 public class MultiThread extends Thread {
@@ -32,15 +34,27 @@ public class MultiThread extends Thread {
     @Override
     public void run() {
         Logger logger = LoggerFactory.getLogger(MultiThread.class);
+
+        //read in config file to skip over specified repos
+        String reposToSkip;
+        try {
+            FileReader reader = new FileReader("config.properties");
+            Properties p = new Properties();
+            p.load(reader);
+            reposToSkip = p.getProperty("REPOS");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         //clone and verify repo for this thread process
         for (int i = startIndex; i < startIndex + 1; ++i) { // can change to execute more repos on one thread
             String name = query.getRepoName(i);
             logger.info("Verifying {} ...", name);
 
-            // repos to skip, do not have the verify command in build.gradle
-            if (name.contains("sketch") || name.contains("jmx-harvester") || name.contains("policycenter")
-                || name.contains("guidewire") || name.contains("transaction") || name.contains("spring-cloud")
-                || name.contains("webhook-to-snmp-trap")) {
+            // repos to skip, do not have verify task in build.gradle
+            if (reposToSkip.contains(name)) {
                 try {
                     verify.deleteRepo(name);
                     logger.info("Skipped verify for {}", name);

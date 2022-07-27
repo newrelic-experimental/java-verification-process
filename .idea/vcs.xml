@@ -2,59 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-JDBC-ExecuteBatch" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-aerospike" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-camel" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-couchbase" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-elasticsearch" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-executors" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-gcp-pubsub" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-http4s" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-hystrix" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-jmx-harvester" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-kotlin-coroutines" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-lettuce" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-micronaut-core" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-micronaut-http" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-mqtt-eclipse-paho" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-mqtt-hivemq" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-mule-4" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-oracle-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-quarkus" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-reactor" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-redisson" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-rxjava" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-smallrye" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-spring-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-tibco-bw6" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-tibco-core" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-undertow" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-vertx" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-java-vertx-extensions" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/cloned-repos/newrelic-sketch-java" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-JDBC-ExecuteBatch" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-aerospike" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-camel" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-couchbase" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-elasticsearch" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-executors" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-http4s" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-lettuce" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-micronaut-core" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-micronaut-http" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-mule-4" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-oracle-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-quarkus" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-reactor" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-redisson" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-smallrye" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-spring-r2dbc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-tibco-bw6" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-undertow" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-vertx" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-java-vertx-extensions" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newrelic-sketch-java" vcs="Git" />
   </component>
 </project>
