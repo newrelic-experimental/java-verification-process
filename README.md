@@ -36,7 +36,9 @@
 
 ## Usage
 
-> This program executes the Gradle task verifyInstrumentation on all repos in Experimental under "newrelic-java". Modify the run method in MultiThread.java to change which repos are skipped/not skipped by the program.
+> This program executes the Gradle task verifyInstrumentation on all repos in Experimental under "newrelic-java". 
+>
+> Some repos under this query do not have the Gradle task verifyInstrumentation. Modify **config.properties** to specify which repos should be skipped by the program. Use the format shown in the file.
 
 ## Building
 
