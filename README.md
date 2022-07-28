@@ -24,9 +24,13 @@
   
 ## Installation
 
-> To install and run:
+> To run locally:
 > 1. Clone this repo to your local machine
 > 2. Run project
+
+>To run using shell script:
+>1. Navigate to "script" directory
+>2. Run the command ./javaverify.sh
 
 ## Getting Started
 
