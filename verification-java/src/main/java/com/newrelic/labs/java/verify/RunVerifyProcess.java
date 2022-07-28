@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
-public class MultiThread extends Thread {
+public class RunVerifyProcess implements Runnable {
     /*
     Run project's processes on different threads to maximize efficiency
      */
@@ -21,8 +21,8 @@ public class MultiThread extends Thread {
     private FileWriter writer;
     private CompletableFuture<Boolean> future;
 
-    public MultiThread(QueryController query, VerifyInstrumentation verify, Report report,
-                       FileWriter writer, int startIndex, CompletableFuture<Boolean> future) {
+    public RunVerifyProcess(QueryController query, VerifyInstrumentation verify, Report report,
+                            FileWriter writer, int startIndex, CompletableFuture<Boolean> future) {
         this.query = query;
         this.verify = verify;
         this.startIndex = startIndex;
@@ -33,7 +33,7 @@ public class MultiThread extends Thread {
 
     @Override
     public void run() {
-        Logger logger = LoggerFactory.getLogger(MultiThread.class);
+        Logger logger = LoggerFactory.getLogger(RunVerifyProcess.class);
 
         //read in config file to skip over specified repos
         String reposToSkip;

@@ -48,7 +48,7 @@ public class Main {
         //For each repo, run on different threads, create CompletableFuture for each Runnable
         for (int i = 0; i < total_count; ++i) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            Runnable worker = new MultiThread(query, verify, report, writer, i, future);
+            Runnable worker = new RunVerifyProcess(query, verify, report, writer, i, future);
             executor.execute(worker);
             listFutures.add(future);
             //next thread starts on next repo, index i
