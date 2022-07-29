@@ -47,7 +47,7 @@ public class VerifyInstrumentation {
         // This code redirects and writes the output to a log file in this project directory;
         // different log file for each repo because parallel thread processes
         processBuilder.redirectErrorStream(true);
-        File log = new File("command-output" + index + ".log");
+        File log = new File("output-logs/command-output" + index + ".log");
         processBuilder.redirectOutput(log);
 
         Process process3 = processBuilder.start();

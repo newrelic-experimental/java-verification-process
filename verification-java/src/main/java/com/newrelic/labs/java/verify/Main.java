@@ -40,6 +40,11 @@ public class Main {
         int exitCode1 = process1.waitFor();
         logger.info("\nCreated directory for cloned repos, exited with error code : {}", exitCode1);
 
+        builder.command("/bin/sh", "-c", "mkdir output-logs");
+        Process process2 = builder.start();
+        int exitCode2 = process2.waitFor();
+        logger.info("\nCreated directory for verify output logs, exited with error code : {}", exitCode2);
+
         //create fixed thread pool
         ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
         //create a CompletableFutures list as callback mechanism for when threads are completed
@@ -63,11 +68,17 @@ public class Main {
         logger.info("Threads terminated");
         System.out.println("\nProcess complete. Refer to report.txt for report.");
 
+        //delete output-logs directory to delete all command logs at once
+        builder.command("/bin/sh", "-c", "rm -r output-logs");
+        Process process3 = builder.start();
+        int exitCode3 = process3.waitFor();
+        logger.info("\nDeleted output-logs directory, exited with error code : {}", exitCode3);
+
         //delete cloned-repos directory to delete all cloned repos at once
         builder.command("/bin/sh", "-c", "rm -r cloned-repos");
-        Process process2 = builder.start();
-        int exitCode2 = process2.waitFor();
-        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode2);
+        Process process4 = builder.start();
+        int exitCode4 = process4.waitFor();
+        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode4);
 
     }
 }

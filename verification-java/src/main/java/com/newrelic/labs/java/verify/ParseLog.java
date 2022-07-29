@@ -13,7 +13,7 @@ public class ParseLog {
     True: success, false: failed
      */
     public static boolean parseForBuild(int index) throws FileNotFoundException {
-        Scanner s = new Scanner(new File("command-output" + index + ".log"));
+        Scanner s = new Scanner(new File("output-logs/command-output" + index + ".log"));
         while (s.hasNextLine()) {
             String line = s.nextLine();
             if (line.startsWith("BUILD SUCCESSFUL")) {
@@ -33,7 +33,7 @@ public class ParseLog {
     Parse through output.log for failure exceptions
      */
     public static String parseForViolation(int index) throws FileNotFoundException {
-        Scanner s = new Scanner(new File("command-output" + index + ".log"));
+        Scanner s = new Scanner(new File("output-logs/command-output" + index + ".log"));
         String fullViolation = "";
         while (s.hasNextLine()) {
             String line = s.nextLine();
@@ -48,11 +48,12 @@ public class ParseLog {
     }
 
     /*
-    Delete log file after it has been parsed for violations
+    Delete log file after it has been parsed, if successful and no fails
     */
     public void deleteParsedLog(int index) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
+        processBuilder.directory(new File("output-logs"));
         Process process = processBuilder.start();
         process.waitFor();
     }

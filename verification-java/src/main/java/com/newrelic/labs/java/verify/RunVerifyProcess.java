@@ -106,15 +106,6 @@ public class RunVerifyProcess implements Runnable {
                 throw new RuntimeException(e);
             }
 
-            //delete output log from this repo
-            try {
-                parse.deleteParsedLog(i);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
             //Add violationResult to the report, include name of repo and violations
             try {
                 report.writeToReport(name, violationResult, writer);
