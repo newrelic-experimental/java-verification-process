@@ -5,29 +5,46 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class VerifyInstrumentation {
+    private String[] knownRepos; //array of repos cloned and saved locally
+
 
     /*
     Clone repo given by cloneUrl from query,
     Change directory and run verifyInstrumentation command,
     Store output log in separate file to parse through for violation
      */
-    public int cloneVerifyProcess(String repoName, String cloneUrl, int index) throws InterruptedException, IOException {
+    public int cloneVerifyProcess(String repoName, String cloneUrl, int index, List<String> knownRepos) throws InterruptedException, IOException {
         Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);
 
-        ProcessBuilder initBuilder = new ProcessBuilder();
+        ProcessBuilder initBuilder1 = new ProcessBuilder();
+        ProcessBuilder initBuilder2 = new ProcessBuilder();
 
         ProcessBuilder processBuilder = new ProcessBuilder();
 
-        // Run git clone here and to clone directory locally into cloned-repos directory
-        initBuilder.command("/bin/sh", "-c", "git clone " + cloneUrl);
-        initBuilder.directory(new File("cloned-repos"));
-        Process process1 = initBuilder.start();
-        int exitCode1 = process1.waitFor();
-        logger.info("\n{} Clone exited with error code : {}", repoName, exitCode1);
+        /* check if already cloned, then do git pull, otherwise continue with clone process */
+        Process process1;
+        int exitCode1;
+        if (knownRepos.contains(repoName)) {
+            // run git pull for known cloned repo
+            initBuilder1.command("/bin/sh", "-c", "git pull");
+            initBuilder1.directory(new File("cloned-repos/" + repoName));
+            process1 = initBuilder1.start();
+            exitCode1 = process1.waitFor();
+            logger.info("\n{} Pull exited with error code : {}", repoName, exitCode1);
+        } else {
+            // Run git clone here and to clone directory locally into cloned-repos directory
+            initBuilder2.command("/bin/sh", "-c", "git clone " + cloneUrl);
+            initBuilder2.directory(new File("cloned-repos"));
+            process1 = initBuilder2.start();
+            exitCode1 = process1.waitFor();
+            logger.info("\n{} Clone exited with error code : {}", repoName, exitCode1);
 
-        // Exit process if clone fails
+        }
+
+        // Exit process if clone or pull fails
         if (exitCode1 != 0)
             return 1;
 
@@ -60,7 +77,7 @@ public class VerifyInstrumentation {
 
     /*
     Generate process to delete newly created directory from cloned repo,
-    For repos that need to be skipped, cannot run verify command, or successful build
+    For repos that need to be skipped, cannot run verify command
      */
     public void deleteRepo(String repoName) throws IOException, InterruptedException {
         Logger logger = LoggerFactory.getLogger(VerifyInstrumentation.class);

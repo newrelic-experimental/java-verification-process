@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
@@ -20,15 +21,17 @@ public class RunVerifyProcess implements Runnable {
     private Report report;
     private FileWriter writer;
     private CompletableFuture<Boolean> future;
+    private List<String> knownRepos;
 
     public RunVerifyProcess(QueryController query, VerifyInstrumentation verify, Report report,
-                            FileWriter writer, int startIndex, CompletableFuture<Boolean> future) {
+                            FileWriter writer, int startIndex, CompletableFuture<Boolean> future, List<String> knownRepos) {
         this.query = query;
         this.verify = verify;
         this.startIndex = startIndex;
         this.report = report;
         this.writer = writer;
         this.future = future;
+        this.knownRepos = knownRepos;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class RunVerifyProcess implements Runnable {
             String cloneUrl = query.getCloneUrl(i);
             int checkClone;
             try {
-                checkClone = verify.cloneVerifyProcess(name, cloneUrl, i);
+                checkClone = verify.cloneVerifyProcess(name, cloneUrl, i, knownRepos);
                 if (checkClone == 1) {
                     logger.info("Unable to clone or build project {}", name);
                     continue;
@@ -87,7 +90,7 @@ public class RunVerifyProcess implements Runnable {
             //skip if verifyInstrumentation command is successful, no violations
             try {
                 if (parse.parseForBuild(i)) {
-                    verify.deleteRepo(name);
+                    //verify.deleteRepo(name);
                     parse.deleteParsedLog(i);
                     logger.info("Successful verify for {}", name);
                     continue;

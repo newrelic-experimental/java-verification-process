@@ -4,6 +4,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,26 +35,20 @@ public class Main {
         Report report = new Report();
         FileWriter writer = report.generateReport();
 
+        List<String> knownRepos;
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("/bin/sh", "-c", "mkdir cloned-repos");
-        Process process1 = builder.start();
-        int exitCode1 = process1.waitFor();
-        logger.info("\nCreated directory for cloned repos, exited with error code : {}", exitCode1);
-
-        builder.command("/bin/sh", "-c", "mkdir output-logs");
-        Process process2 = builder.start();
-        int exitCode2 = process2.waitFor();
-        logger.info("\nCreated directory for verify output logs, exited with error code : {}", exitCode2);
+        knownRepos = handleCreateDirectories(logger, builder);
 
         //create fixed thread pool
         ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
         //create a CompletableFutures list as callback mechanism for when threads are completed
         List<CompletableFuture<Boolean>> listFutures = new ArrayList<>();
 
+
         //For each repo, run on different threads, create CompletableFuture for each Runnable
         for (int i = 0; i < total_count; ++i) {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            Runnable worker = new RunVerifyProcess(query, verify, report, writer, i, future);
+            Runnable worker = new RunVerifyProcess(query, verify, report, writer, i, future, knownRepos);
             executor.execute(worker);
             listFutures.add(future);
             //next thread starts on next repo, index i
@@ -68,6 +63,39 @@ public class Main {
         logger.info("Threads terminated");
         System.out.println("\nProcess complete. Refer to report.txt for report.");
 
+        handleDeleteDirectories(logger, builder);
+
+    }
+
+    public static List<String> handleCreateDirectories(Logger logger, ProcessBuilder builder) throws IOException, InterruptedException {
+        File clonedRepoDir = new File("cloned-repos");
+        List<String> knownRepos = new ArrayList<String>();
+
+
+        if (clonedRepoDir.isDirectory()) {
+            //Store known cloned repos in a list
+            File dir = new File("cloned-repos");
+            File[] directoryListing = dir.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing)
+                    knownRepos.add(child.getName());
+            }
+        } else {
+            builder.command("/bin/sh", "-c", "mkdir cloned-repos");
+            Process process1 = builder.start();
+            int exitCode1 = process1.waitFor();
+            logger.info("\nCreated directory for cloned repos, exited with error code : {}", exitCode1);
+        }
+
+        builder.command("/bin/sh", "-c", "mkdir output-logs");
+        Process process2 = builder.start();
+        int exitCode2 = process2.waitFor();
+        logger.info("\nCreated directory for verify output logs, exited with error code : {}", exitCode2);
+
+        return knownRepos;
+    }
+
+    public static void handleDeleteDirectories(Logger logger, ProcessBuilder builder) throws IOException, InterruptedException {
         //delete output-logs directory to delete all command logs at once
         builder.command("/bin/sh", "-c", "rm -r output-logs");
         Process process3 = builder.start();
@@ -75,10 +103,11 @@ public class Main {
         logger.info("\nDeleted output-logs directory, exited with error code : {}", exitCode3);
 
         //delete cloned-repos directory to delete all cloned repos at once
-        builder.command("/bin/sh", "-c", "rm -r cloned-repos");
+        /*builder.command("/bin/sh", "-c", "rm -r cloned-repos");
         Process process4 = builder.start();
         int exitCode4 = process4.waitFor();
-        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode4);
-
+        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode4);*/
     }
+
+
 }
