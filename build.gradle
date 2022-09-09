@@ -172,6 +172,8 @@ subprojects {
     testImplementation  fileTree(dir: '../lib', include: "*.jar") // + project.javaAgentVersion
     testImplementation 'org.nanohttpd:nanohttpd:2.3.1'
     testImplementation 'com.newrelic.agent.java:newrelic-agent:' + project.javaAgentVersion
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+    implementation 'com.amazonaws:aws-java-sdk-sns'
   }
 
   task install(dependsOn: buildIfNeeded, type: Copy) {

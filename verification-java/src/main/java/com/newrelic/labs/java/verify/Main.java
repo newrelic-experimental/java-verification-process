@@ -65,6 +65,12 @@ public class Main {
 
         handleDeleteDirectories(logger, builder);
 
+        // Send report via Amazon SNS to subscriber email using java-verify topic
+        SNSService snsService = new SNSService();
+        snsService.SNSEmailMessage();
+        // Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
+        snsService.SNSShutdownInstance();
+
     }
 
     public static List<String> handleCreateDirectories(Logger logger, ProcessBuilder builder) throws IOException, InterruptedException {
@@ -102,11 +108,6 @@ public class Main {
         int exitCode3 = process3.waitFor();
         logger.info("\nDeleted output-logs directory, exited with error code : {}", exitCode3);
 
-        //delete cloned-repos directory to delete all cloned repos at once
-        /*builder.command("/bin/sh", "-c", "rm -r cloned-repos");
-        Process process4 = builder.start();
-        int exitCode4 = process4.waitFor();
-        logger.info("\nDeleted cloned-repos directory, exited with error code : {}", exitCode4);*/
     }
 
 

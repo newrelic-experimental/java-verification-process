@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class VerifyInstrumentation {
-    private String[] knownRepos; //array of repos cloned and saved locally
-
 
     /*
     Clone repo given by cloneUrl from query,

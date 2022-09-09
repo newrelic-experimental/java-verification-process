@@ -34,15 +34,17 @@
 
 ## Getting Started
 
-> Once the project is cloned and running, refer to **logger.txt** for an active program log. Once the program has finished, refer to **report.txt** for a report of instrumentations that failed verify.
+> Once the project is cloned and running, refer to `logger.txt` for an active program log. Once the program has finished, refer to **report.txt** for a report of instrumentations that failed verify.
 > 
-> Note that report.txt lists the repo name without any other information if a project has build errors or ran the Gradle tasks checkForDependencies or verifyInstrumentation with errors.
+> Note that `report.txt` lists the repo name without any other information if a project has build errors or ran the Gradle tasks checkForDependencies or verifyInstrumentation with errors.
 
 ## Usage
 
 > This program executes the Gradle task verifyInstrumentation on all repos in Experimental under "newrelic-java". 
 >
-> Some repos under this query do not have the Gradle task verifyInstrumentation. Modify **config.properties** to specify which repos should be skipped by the program. Use the format shown in the file.
+> Some repos under this query do not have the Gradle task verifyInstrumentation. Modify `config.properties` to specify which repos should be skipped by the program. Use the format shown in the file.
+> 
+> Insert AWS Credentials into `aws-config.properties` to enable AWS SNS messaging
 
 ## Building
 

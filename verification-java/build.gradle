@@ -10,6 +10,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: '../test-lib')
     implementation 'org.json:json:20220320'
     implementation 'org.slf4j:slf4j-log4j12:1.7.12'
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+    implementation 'com.amazonaws:aws-java-sdk-sns'
 }
 
 jar {
