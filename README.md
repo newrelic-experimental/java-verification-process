@@ -45,6 +45,8 @@
 > Some repos under this query do not have the Gradle task verifyInstrumentation. Modify `config.properties` to specify which repos should be skipped by the program. Use the format shown in the file.
 > 
 > Insert AWS Credentials into `aws-config.properties` to enable AWS SNS messaging
+> 
+> Specify number of threads to run concurrently in `config.properties` as `NTHREADS`. Default is 10.
 
 ## Building
 

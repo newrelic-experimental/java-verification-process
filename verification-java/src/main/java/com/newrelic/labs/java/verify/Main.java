@@ -5,15 +5,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.*;
 
 public class Main {
-
-    private static final int NTHREADS = 10;
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         /*
@@ -39,8 +39,14 @@ public class Main {
         ProcessBuilder builder = new ProcessBuilder();
         knownRepos = handleCreateDirectories(logger, builder);
 
+        //get configured number of threads to run
+        FileReader reader = new FileReader("config.properties");
+        Properties p = new Properties();
+        p.load(reader);
+        int n_threads = Integer.parseInt(p.getProperty("NTHREADS"));
+
         //create fixed thread pool
-        ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
+        ExecutorService executor = Executors.newFixedThreadPool(n_threads);
         //create a CompletableFutures list as callback mechanism for when threads are completed
         List<CompletableFuture<Boolean>> listFutures = new ArrayList<>();
 
