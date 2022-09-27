@@ -12,6 +12,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-log4j12:1.7.12'
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
     implementation 'com.amazonaws:aws-java-sdk-sns'
+	implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '7.3-20210825160000+0000'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r'
+    implementation 'commons-io:commons-io:2.11.0'
 }
 
 jar {

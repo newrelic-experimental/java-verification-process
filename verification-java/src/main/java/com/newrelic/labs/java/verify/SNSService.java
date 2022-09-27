@@ -40,7 +40,7 @@ public class SNSService {
         String msg = scanReportToString();
         PublishRequest publishRequest = new PublishRequest("arn:aws:sns:us-west-2:830139413159:java-verify", msg);
         PublishResult publishResponse = snsClient.publish(publishRequest);
-
+        logger.info("Result of publishing result is "+ publishResponse);
         logger.info("Published Email topic");
     }
 
@@ -54,6 +54,7 @@ public class SNSService {
         String msg = "Shutdown";
         PublishRequest publishRequest = new PublishRequest("arn:aws:sns:us-west-2:830139413159:java-verify-shutdown", msg);
         PublishResult publishResponse = snsClient.publish(publishRequest);
+        logger.info("Result of publishing shutdown is "+ publishResponse);
         logger.info("Published Shutdown topic");
     }
 

@@ -1,5 +1,6 @@
 package com.newrelic.labs.java.verify;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,8 @@ import java.util.concurrent.*;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+    	
+    	long start = System.currentTimeMillis();
         /*
         Create com.newrelic.labs.java.verify.QueryController and run search method to store response of Search API with keyword "newrelic-java"
          */
@@ -36,8 +39,7 @@ public class Main {
         FileWriter writer = report.generateReport();
 
         List<String> knownRepos;
-        ProcessBuilder builder = new ProcessBuilder();
-        knownRepos = handleCreateDirectories(logger, builder);
+        knownRepos = handleCreateDirectories(logger);
 
         //get configured number of threads to run
         FileReader reader = new FileReader("config.properties");
@@ -60,16 +62,21 @@ public class Main {
             //next thread starts on next repo, index i
         }
 
-        executor.shutdown();
-
         //callback to check if all CompletableFutures from loop have completed
-        CompletableFuture allFutures = CompletableFuture.allOf(listFutures.toArray(new CompletableFuture[listFutures.size()]));
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(listFutures.toArray(new CompletableFuture[listFutures.size()]));
         allFutures.get();
         report.closeFile(writer);
         logger.info("Threads terminated");
         System.out.println("\nProcess complete. Refer to report.txt for report.");
 
-        handleDeleteDirectories(logger, builder);
+        handleDeleteDirectories(logger);
+        
+        // cleanup
+        executor.shutdown();
+        
+        long end = System.currentTimeMillis();
+        
+        logger.info("Verify process took "+ TimeUnit.SECONDS.convert(end-start, TimeUnit.MILLISECONDS)+" seconds to complete");
 
         // Send report via Amazon SNS to subscriber email using java-verify topic
         SNSService snsService = new SNSService();
@@ -77,14 +84,15 @@ public class Main {
         // Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
         snsService.SNSShutdownInstance();
 
+        System.exit(0);
     }
 
-    public static List<String> handleCreateDirectories(Logger logger, ProcessBuilder builder) throws IOException, InterruptedException {
+    public static List<String> handleCreateDirectories(Logger logger) throws IOException, InterruptedException {
         File clonedRepoDir = new File("cloned-repos");
         List<String> knownRepos = new ArrayList<String>();
 
 
-        if (clonedRepoDir.isDirectory()) {
+        if (clonedRepoDir.exists() && clonedRepoDir.isDirectory()) {
             //Store known cloned repos in a list
             File dir = new File("cloned-repos");
             File[] directoryListing = dir.listFiles();
@@ -93,26 +101,32 @@ public class Main {
                     knownRepos.add(child.getName());
             }
         } else {
-            builder.command("/bin/sh", "-c", "mkdir cloned-repos");
-            Process process1 = builder.start();
-            int exitCode1 = process1.waitFor();
-            logger.info("\nCreated directory for cloned repos, exited with error code : {}", exitCode1);
+        	boolean created = clonedRepoDir.mkdirs();
+        	if(created) {
+        		logger.info("\nCreated directory for cloned repos");
+        	} else {
+        		logger.info("\nFailed to create directory for cloned repos");
+        	}
         }
 
-        builder.command("/bin/sh", "-c", "mkdir output-logs");
-        Process process2 = builder.start();
-        int exitCode2 = process2.waitFor();
-        logger.info("\nCreated directory for verify output logs, exited with error code : {}", exitCode2);
+        File outputDir = new File("output-logs");
+        if(!outputDir.exists()) {
+        	boolean created = outputDir.mkdirs();
+        	if(created) {
+                logger.info("\nCreated directory for verify output logs");
+        	} else {
+                logger.info("\nFailed to create directory for verify output logs");
+        	}
+        }
 
         return knownRepos;
     }
 
-    public static void handleDeleteDirectories(Logger logger, ProcessBuilder builder) throws IOException, InterruptedException {
-        //delete output-logs directory to delete all command logs at once
-        builder.command("/bin/sh", "-c", "rm -r output-logs");
-        Process process3 = builder.start();
-        int exitCode3 = process3.waitFor();
-        logger.info("\nDeleted output-logs directory, exited with error code : {}", exitCode3);
+    public static void handleDeleteDirectories(Logger logger) throws IOException, InterruptedException {
+    	
+    	File dir = new File("output-logs");
+    	FileUtils.deleteDirectory(dir);
+        logger.info("\nDeleted output-logs directory");
 
     }
 
