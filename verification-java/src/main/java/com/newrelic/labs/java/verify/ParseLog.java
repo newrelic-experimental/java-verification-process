@@ -50,12 +50,17 @@ public class ParseLog {
     /*
     Delete log file after it has been parsed, if successful and no fails
     */
-    public void deleteParsedLog(int index) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
-        processBuilder.directory(new File("output-logs"));
-        Process process = processBuilder.start();
-        process.waitFor();
+    public static void deleteParsedLog(int index) throws IOException, InterruptedException {
+    	
+    	File logDir = new File("output-logs");
+    	
+    	File logFile = new File(logDir,"command-output" + index + ".log");
+    	logFile.delete();
+//        ProcessBuilder processBuilder = new ProcessBuilder();
+//        processBuilder.command("/bin/sh", "-c", "rm command-output" + index + ".log");
+//        processBuilder.directory(new File("output-logs"));
+//        Process process = processBuilder.start();
+//        process.waitFor();
     }
 
 

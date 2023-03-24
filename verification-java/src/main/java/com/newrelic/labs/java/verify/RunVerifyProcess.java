@@ -85,13 +85,12 @@ public class RunVerifyProcess implements Runnable {
             }
 
             // Parse through logged output - collect violation information
-            ParseLog parse = new ParseLog();
 
             //skip if verifyInstrumentation command is successful, no violations
             try {
-                if (parse.parseForBuild(i)) {
+                if (ParseLog.parseForBuild(i)) {
                     //verify.deleteRepo(name);
-                    parse.deleteParsedLog(i);
+                	ParseLog.deleteParsedLog(i);
                     logger.info("Successful verify for {}", name);
                     continue;
                 }
@@ -104,7 +103,7 @@ public class RunVerifyProcess implements Runnable {
             //parse output log for violations, store in violationResult
             String violationResult;
             try {
-                violationResult = parse.parseForViolation(i);
+                violationResult = ParseLog.parseForViolation(i);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
