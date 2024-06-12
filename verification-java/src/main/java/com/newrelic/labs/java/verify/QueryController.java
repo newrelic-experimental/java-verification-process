@@ -14,14 +14,13 @@ public class QueryController {
     private JSONObject fullResponse;
 
     /*
-    Search for repos within GitHub with name "newrelic-java",
+    Search for repos within the NR GitHub repos in Experimental and Community with tag "nrlabs-java-verify",
     Read Input Stream into StringBuilder,
     Convert to JSON and return repos in JSONArray of items
      */
     public void search() throws IOException {
 
         // Search using HttpUrlConnection and GitHub API with query parameters
-//        URL url = new URL("https://api.github.com/search/repositories?q=newrelic-java+org:newrelic-experimental+language:java&per_page=100&sort=updated");
         URL url = new URL("https://api.github.com/search/repositories?q=org:newrelic-experimental+org:newrelic+topic:nrlabs-java-verify+language:java&per_page=100&sort=updated");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
