@@ -78,11 +78,15 @@ public class Main {
         
         logger.info("Verify process took "+ TimeUnit.SECONDS.convert(end-start, TimeUnit.MILLISECONDS)+" seconds to complete");
 
-        // Send report via Amazon SNS to subscriber email using java-verify topic
-        SNSService snsService = new SNSService();
-        snsService.SNSEmailMessage();
-        // Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
-        snsService.SNSShutdownInstance();
+//        try {
+//			// Send report via Amazon SNS to subscriber email using java-verify topic
+//			SNSService snsService = new SNSService();
+//			snsService.SNSEmailMessage();
+//			// Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
+//			snsService.SNSShutdownInstance();
+//		} catch (IOException e) {
+//			logger.error("SNS operations failed due to error", e);
+//		}
 
         System.exit(0);
     }
