@@ -32,13 +32,17 @@ public class SNSService {
 
     public void SNSEmailMessage() throws IOException {
         Logger logger = LoggerFactory.getLogger(SNSService.class);
+        logger.info("Constructing Report Email ");
         AmazonSNS snsClient = AmazonSNSClient
                 .builder()
                 .withRegion("us-west-2")
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
+        logger.info("Got SNSClient " + snsClient);
         String msg = scanReportToString();
+        logger.info("Got report message " + msg);
         PublishRequest publishRequest = new PublishRequest("arn:aws:sns:us-west-2:830139413159:java-verify", msg);
+        logger.info("Got publish request " + publishRequest);
         PublishResult publishResponse = snsClient.publish(publishRequest);
         logger.info("Result of publishing result is "+ publishResponse);
         logger.info("Published Email topic");
@@ -46,13 +50,16 @@ public class SNSService {
 
     public void SNSShutdownInstance() {
         Logger logger = LoggerFactory.getLogger(SNSService.class);
+        logger.info("Starting Instance Shutdown ");
         AmazonSNS snsClient = AmazonSNSClient
                 .builder()
                 .withRegion("us-west-2")
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
+        logger.info("Got SNSClient " + snsClient);
         String msg = "Shutdown";
         PublishRequest publishRequest = new PublishRequest("arn:aws:sns:us-west-2:830139413159:java-verify-shutdown", msg);
+        logger.info("Got publish request " + publishRequest);
         PublishResult publishResponse = snsClient.publish(publishRequest);
         logger.info("Result of publishing shutdown is "+ publishResponse);
         logger.info("Published Shutdown topic");

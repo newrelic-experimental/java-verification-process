@@ -37,6 +37,7 @@ public class RunVerifyProcess implements Runnable {
     @Override
     public void run() {
         Logger logger = LoggerFactory.getLogger(RunVerifyProcess.class);
+        Stats.incrementStarted();
 
         //read in config file to skip over specified repos
         String reposToSkip;
@@ -118,6 +119,7 @@ public class RunVerifyProcess implements Runnable {
         }
         //update CompletableFuture parameter
         future.complete(true);
+        Stats.incrementProcessed();
     }
 
 }

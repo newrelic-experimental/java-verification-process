@@ -31,9 +31,14 @@ public class Main {
         Logger logger = LoggerFactory.getLogger(Main.class);
         logger.info("Program Log\n");
 
+        ScheduledExecutorService statsExecutor = Executors.newSingleThreadScheduledExecutor();
+        statsExecutor.scheduleAtFixedRate(new StatsReporter(), 1L, 1L, TimeUnit.MINUTES);
+        
         System.out.println("\nVerifying...");
 
         int total_count = query.getRepoCount();
+        Stats.setNumberOfRepos(total_count);
+        
         VerifyInstrumentation verify = new VerifyInstrumentation();
         Report report = new Report();
         FileWriter writer = report.generateReport();
@@ -59,6 +64,7 @@ public class Main {
             Runnable worker = new RunVerifyProcess(query, verify, report, writer, i, future, knownRepos);
             executor.execute(worker);
             listFutures.add(future);
+            Stats.incrementSubmitted();
             //next thread starts on next repo, index i
         }
 
@@ -73,20 +79,21 @@ public class Main {
         
         // cleanup
         executor.shutdown();
+        statsExecutor.shutdown();
         
         long end = System.currentTimeMillis();
         
         logger.info("Verify process took "+ TimeUnit.SECONDS.convert(end-start, TimeUnit.MILLISECONDS)+" seconds to complete");
 
-//        try {
-//			// Send report via Amazon SNS to subscriber email using java-verify topic
-//			SNSService snsService = new SNSService();
-//			snsService.SNSEmailMessage();
-//			// Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
-//			snsService.SNSShutdownInstance();
-//		} catch (IOException e) {
-//			logger.error("SNS operations failed due to error", e);
-//		}
+        try {
+			// Send report via Amazon SNS to subscriber email using java-verify topic
+			SNSService snsService = new SNSService();
+			snsService.SNSEmailMessage();
+			// Send message to the Shutdown topic, trigger lambda to shut down EC2 instance
+			snsService.SNSShutdownInstance();
+		} catch (IOException e) {
+			logger.error("SNS operations failed due to error", e);
+		}
 
         System.exit(0);
     }
